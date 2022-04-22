@@ -10,11 +10,15 @@
 #include "Definitions.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Background.h"
 
 class Game{
     sf::RenderWindow   window;
+
     Player             player;
     std::vector<Enemy> enemies;
+    Background         background;
+
 public:
     Game();
     void Run();

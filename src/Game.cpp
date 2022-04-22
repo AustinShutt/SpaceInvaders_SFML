@@ -5,7 +5,9 @@
 #include "Game.h"
 
 Game::Game() {
-    window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Space Invaders");
+    window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Space Invaders");    //Creates Window
+    sf::View view({VIEW_WIDTH/2, VIEW_HEIGHT/2},{VIEW_WIDTH, VIEW_HEIGHT} );                //Sets window view
+    window.setView(view);
 }
 
 void Game::Run() {
@@ -47,6 +49,7 @@ void Game::Update() {
 void Game::Render() {
     window.clear();
     //Add assets to display here
+    window.draw(background);
     window.draw(player);
     window.display();
 }

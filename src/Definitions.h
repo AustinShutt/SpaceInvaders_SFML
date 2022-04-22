@@ -5,8 +5,10 @@
 #ifndef INC_28_SPACEINVADERS_DEFINITIONS_H
 #define INC_28_SPACEINVADERS_DEFINITIONS_H
 
-constexpr unsigned int WINDOW_WIDTH      = 600;
-constexpr unsigned int WINDOW_HEIGHT     = 600;
+constexpr unsigned int WINDOW_WIDTH      = 512;
+constexpr unsigned int WINDOW_HEIGHT     = 768;
+constexpr unsigned int VIEW_WIDTH        = 256;
+constexpr unsigned int VIEW_HEIGHT       = 384;
 constexpr float        TIME_STEP         = 1.f/60.f;
 
 constexpr float        PLAYER_MOVE_SPEED = 5.0f;
