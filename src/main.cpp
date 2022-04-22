@@ -2,6 +2,9 @@
 
 int main()
 {
+
+    AssetManager::loadAssets();
+
     Game game;
     game.Run();
 

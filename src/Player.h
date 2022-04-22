@@ -6,6 +6,8 @@
 #define INC_28_SPACEINVADERS_PLAYER_H
 
 #include <SFML/Graphics.hpp>
+#include "AssetManager.h"
+#include "Definitions.h"
 
 class Player : public sf::Sprite {
 

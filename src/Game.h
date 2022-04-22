@@ -10,14 +10,17 @@
 #include "Definitions.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Projectile.h"
+#include "Barrier.h"
 #include "Background.h"
 
 class Game{
-    sf::RenderWindow   window;
-
-    Player             player;
-    std::vector<Enemy> enemies;
-    Background         background;
+    sf::RenderWindow        window;
+    Player                  player;
+    Background              background;
+    std::vector<Enemy>      enemies;
+    std::vector<Barrier>    barriers;
+    std::vector<Projectile> projectiles;
 
 public:
     Game();
