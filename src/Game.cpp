@@ -41,11 +41,12 @@ void Game::HandleInput() {
 }
 void Game::Update() {
     //Update Scene
+    player.update();
 }
 
 void Game::Render() {
     window.clear();
     //Add assets to display here
-
+    window.draw(player);
     window.display();
 }

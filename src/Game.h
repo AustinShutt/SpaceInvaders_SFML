@@ -8,10 +8,13 @@
 
 #include <SFML/Graphics.hpp>
 #include "Definitions.h"
+#include "Player.h"
+#include "Enemy.h"
 
 class Game{
-    sf::RenderWindow window;
-
+    sf::RenderWindow   window;
+    Player             player;
+    std::vector<Enemy> enemies;
 public:
     Game();
     void Run();
