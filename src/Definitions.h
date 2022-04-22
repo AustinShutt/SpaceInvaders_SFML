@@ -11,7 +11,7 @@ constexpr unsigned int VIEW_WIDTH        = 256;
 constexpr unsigned int VIEW_HEIGHT       = 384;
 constexpr float        TIME_STEP         = 1.f/60.f;
 
-constexpr float        PLAYER_MOVE_SPEED = 5.0f;
+constexpr float        PLAYER_MOVE_SPEED = 1.0f;
 constexpr float        PROJECTILE_SPEED  = 20.f;
 constexpr unsigned int PROJECTILE_DAMAGE = 1u;
 
