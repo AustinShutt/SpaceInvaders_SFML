@@ -6,12 +6,21 @@
 #define INC_28_SPACEINVADERS_ENEMY_H
 
 #include <SFML/Graphics.hpp>
+#include "AssetManager.h"
+#include <cstdlib>
+#include "Definitions.h"
 
 class Enemy : public sf::Sprite {
+    static sf::Clock timer;
+    static float elapsedTime;
+    static float timeToShoot;
+
 public:
-    Enemy();
+    Enemy(EnemyType enemyType);
 
     void update();
+    static bool isOffCD();
+
 };
 
 

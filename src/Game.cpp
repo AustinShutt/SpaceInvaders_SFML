@@ -6,22 +6,11 @@
 
 Game::Game() {
     window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Space Invaders");    //Creates Window
-    sf::View view({VIEW_WIDTH/2, VIEW_HEIGHT/2},{VIEW_WIDTH, VIEW_HEIGHT} );                //Sets window view
+    sf::View view({VIEW_WIDTH/2.f, VIEW_HEIGHT/2.f},{VIEW_WIDTH, VIEW_HEIGHT} );            //Sets window view
     window.setView(view);
 
-    Barrier a, b, c, d;
-
-    const float OFFSET = 24.f;
-
-    a.setPosition({64 * 1.f - OFFSET, VIEW_HEIGHT*5.f/6.f});
-    b.setPosition({64 * 2.f - OFFSET, VIEW_HEIGHT*5.f/6.f});
-    c.setPosition({64 * 3.f - OFFSET, VIEW_HEIGHT*5.f/6.f});
-    d.setPosition({64 * 4.f - OFFSET, VIEW_HEIGHT*5.f/6.f});
-
-    barriers.push_back(a);
-    barriers.push_back(b);
-    barriers.push_back(c);
-    barriers.push_back(d);
+    initializeBarriers();
+    initializeEnemies();
 }
 
 void Game::Run() {
@@ -57,9 +46,7 @@ void Game::HandleInput() {
         if(event.type == sf::Event::KeyPressed)
         {
             if(event.key.code == sf::Keyboard::Space)
-            {
-                //FIRE
-            }
+                shipFire();
         }
     }
 
@@ -69,16 +56,146 @@ void Game::HandleInput() {
         player.move(PLAYER_MOVE_SPEED, 0);
 }
 void Game::Update() {
-    player.update();
+
+
+    enemyFire();
+
+    for(auto& itr : projectiles) itr.move({0, -PROJECTILE_SPEED});
+    for(auto& itr : enemyProj)   itr.move({0,  PROJECTILE_SPEED});
+
+    for(int k = 0; k < projectiles.size();)
+    {
+        bool hitRegistered = false;
+
+        for(int i = 0; i < enemies.size();)
+        {
+            if(enemies[i].getGlobalBounds().intersects(projectiles[k].getGlobalBounds()))
+            {
+                enemies.erase(enemies.begin() + i);
+                hitRegistered = true;
+                break;
+            }
+            else
+            {
+                ++i;
+            }
+        }
+
+        if(hitRegistered)
+        {
+            projectiles.erase(projectiles.begin() + k);
+        }
+        else
+        {
+            ++k;
+        }
+
+    }
+
+    if(movDir == EnemyMove::RIGHT)
+    {
+        for(auto& itr : enemies)
+            itr.move(ENEMY_MOVE_SPEED, 0);
+    }
+    else if(movDir == EnemyMove::LEFT)
+    {
+        for(auto& itr : enemies)
+            itr.move(-ENEMY_MOVE_SPEED, 0);
+    }
+    else
+    {
+        for(auto& itr : enemies)
+            itr.move(0, 4);
+    }
+
+
+    if(movDir == EnemyMove::DOWN)
+    {
+        if(prevDir == EnemyMove::RIGHT)
+            movDir = EnemyMove::LEFT;
+        else
+            movDir = EnemyMove::RIGHT;
+
+        return;
+    }
+
+    for(auto& itr : enemies)
+    {
+        if(itr.getPosition().x + 20 > 256)
+        {
+            prevDir= EnemyMove::RIGHT;
+            movDir = EnemyMove::DOWN;
+            break;
+        }
+        else if(itr.getPosition().x - 2 < 0)
+        {
+            prevDir=EnemyMove::LEFT;
+            movDir = EnemyMove::DOWN;
+            break;
+        }
+    }
 }
 
 void Game::Render() {
     window.clear();
     window.draw(background);
     window.draw(player);
-
-    for(int i = 0; i < barriers.size(); i++)
-        window.draw(barriers[i]);
-
+    for(auto& itr: barriers) window.draw(itr);
+    for(auto& itr : enemies)      window.draw(itr);
+    for(auto& itr : projectiles) window.draw(itr);
+    for(auto& itr : enemyProj)   window.draw(itr);
     window.display();
+}
+
+void Game::initializeBarriers() {
+    Barrier a, b, c, d;
+
+    const float OFFSET = 24.f;
+
+    a.setPosition({64 * 1.f - OFFSET, VIEW_HEIGHT*5.f/6.f});
+    b.setPosition({64 * 2.f - OFFSET, VIEW_HEIGHT*5.f/6.f});
+    c.setPosition({64 * 3.f - OFFSET, VIEW_HEIGHT*5.f/6.f});
+    d.setPosition({64 * 4.f - OFFSET, VIEW_HEIGHT*5.f/6.f});
+
+    barriers.push_back(a);
+    barriers.push_back(b);
+    barriers.push_back(c);
+    barriers.push_back(d);
+}
+
+void Game::initializeEnemies() {
+
+    movDir = EnemyMove::RIGHT;
+    int num = VIEW_WIDTH / 16;
+    unsigned int padding = 5;
+    unsigned int yOffset = 50;
+
+    for(int i = 0; i < 8; i++)
+    {
+        for(int j = 0; j < 10; j++)
+        {
+            Enemy temp(static_cast<EnemyType>(i/2));
+
+            temp.setPosition(num * j + padding, i * num + padding + yOffset);
+            enemies.push_back(temp);
+        }
+    }
+}
+
+void Game::shipFire() {
+
+    //TODO: Add cool down to ship fire ability
+    Projectile proj;
+    proj.setPosition(player.getPosition());
+    projectiles.push_back(proj);
+}
+
+void Game::enemyFire() {
+    if(Enemy::isOffCD() && !enemies.empty())
+    {
+        int enemyPos = rand() % enemies.size();
+        Projectile projectile;
+        projectile.setPosition(enemies[enemyPos].getPosition());
+        enemyProj.push_back((projectile));
+    }
 }

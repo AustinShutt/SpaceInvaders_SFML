@@ -21,6 +21,9 @@ class Game{
     std::vector<Enemy>      enemies;
     std::vector<Barrier>    barriers;
     std::vector<Projectile> projectiles;
+    std::vector<Projectile> enemyProj;
+    EnemyMove               movDir;
+    EnemyMove               prevDir;
 
 public:
     Game();
@@ -30,6 +33,12 @@ private:
     void HandleInput();
     void Update();
     void Render();
+
+    void initializeBarriers();
+    void initializeEnemies();
+
+    void shipFire();
+    void enemyFire();
 };
 
 

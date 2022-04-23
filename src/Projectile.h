@@ -6,6 +6,7 @@
 #define INC_28_SPACEINVADERS_PROJECTILE_H
 
 #include <SFML/Graphics.hpp>
+#include "AssetManager.h"
 
 class Projectile : public sf::Sprite{
 public:

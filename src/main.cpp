@@ -1,10 +1,13 @@
 #include "Game.h"
+#include <cstdlib>
+#include <ctime>
 
 int main()
 {
 
-    AssetManager::loadAssets();
+    srand((unsigned) time(nullptr) );
 
+    AssetManager::loadAssets();
     Game game;
     game.Run();
 
