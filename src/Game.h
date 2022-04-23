@@ -39,6 +39,9 @@ private:
 
     void shipFire();
     void enemyFire();
+
+    void updatePlayerProjectiles();
+    void updateEnemyProjectiles();
 };
 
 

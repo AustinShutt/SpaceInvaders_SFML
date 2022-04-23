@@ -57,40 +57,9 @@ void Game::HandleInput() {
 }
 void Game::Update() {
 
-
     enemyFire();
-
-    for(auto& itr : projectiles) itr.move({0, -PROJECTILE_SPEED});
-    for(auto& itr : enemyProj)   itr.move({0,  PROJECTILE_SPEED});
-
-    for(int k = 0; k < projectiles.size();)
-    {
-        bool hitRegistered = false;
-
-        for(int i = 0; i < enemies.size();)
-        {
-            if(enemies[i].getGlobalBounds().intersects(projectiles[k].getGlobalBounds()))
-            {
-                enemies.erase(enemies.begin() + i);
-                hitRegistered = true;
-                break;
-            }
-            else
-            {
-                ++i;
-            }
-        }
-
-        if(hitRegistered)
-        {
-            projectiles.erase(projectiles.begin() + k);
-        }
-        else
-        {
-            ++k;
-        }
-
-    }
+    updateEnemyProjectiles();
+    updatePlayerProjectiles();
 
     if(movDir == EnemyMove::RIGHT)
     {
@@ -197,5 +166,104 @@ void Game::enemyFire() {
         Projectile projectile;
         projectile.setPosition(enemies[enemyPos].getPosition());
         enemyProj.push_back((projectile));
+    }
+}
+
+
+void Game::updatePlayerProjectiles() {
+
+    for(auto& itr : projectiles) itr.move({0, -PROJECTILE_SPEED});
+
+    for(int k = 0; k < projectiles.size();)
+    {
+        bool hitRegistered = false;
+
+        for(int i = 0; i < enemies.size();)
+        {
+            if(projectiles[k].getPosition().y < 0)
+            {
+                hitRegistered = true;
+                break;
+            }
+            else if(enemies[i].getGlobalBounds().intersects(projectiles[k].getGlobalBounds()))
+            {
+                enemies.erase(enemies.begin() + i);
+                hitRegistered = true;
+                break;
+            }
+            else
+            {
+                ++i;
+            }
+        }
+
+        if(hitRegistered)
+        {
+            projectiles.erase(projectiles.begin() + k);
+        }
+        else
+        {
+            ++k;
+        }
+
+    }
+
+
+    for(int i = 0; i < projectiles.size();)
+    {
+        bool hitDetected = false;
+
+        for(int j = 0; j < barriers.size(); j++)
+        {
+            if(barriers[j].getGlobalBounds().intersects(projectiles[i].getGlobalBounds()))
+            {
+                hitDetected = true;
+                break;
+            }
+        }
+
+        if(hitDetected)
+            projectiles.erase(projectiles.begin() + i);
+        else
+            i++;
+    }
+}
+
+void Game::updateEnemyProjectiles() {
+    for(auto& itr : enemyProj)   itr.move({0,  PROJECTILE_SPEED});
+
+    for(int i = 0; i < enemyProj.size(); )
+    {
+        if(enemyProj[i].getPosition().y > VIEW_HEIGHT)
+        {
+            enemyProj.erase(enemyProj.begin() + i);
+        }
+        else if(player.getGlobalBounds().intersects(enemyProj[i].getGlobalBounds()))
+        {
+            //TODO: Player Hit, lose life.
+            enemyProj.erase(enemyProj.begin() + i);
+        }
+        else
+        {
+            i++;
+        }
+    }
+
+    for(int i = 0; i < enemyProj.size();)
+    {
+        bool hitDetected = false;
+        for(int j = 0; j < barriers.size(); j++)
+        {
+            if(barriers[j].getGlobalBounds().intersects(enemyProj[i].getGlobalBounds()))
+            {
+                hitDetected = true;
+                break;
+            }
+        }
+
+        if(hitDetected)
+            enemyProj.erase(enemyProj.begin() + i);
+        else
+           i++;
     }
 }
