@@ -19,5 +19,5 @@ constexpr float        PLAYER_MOVE_SPEED = 1.0f;
 constexpr float        PROJECTILE_SPEED  = 5.f;
 constexpr unsigned int PROJECTILE_DAMAGE = 1u;
 constexpr float        ENEMY_FIRE_CD     = .75f;
-
+constexpr float        ENEMY_ANIMATE_TIME = .5f;
 #endif //INC_28_SPACEINVADERS_DEFINITIONS_H

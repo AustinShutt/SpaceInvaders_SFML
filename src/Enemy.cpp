@@ -7,6 +7,7 @@
 sf::Clock Enemy::timer;
 float Enemy::elapsedTime = 0;
 float Enemy::timeToShoot = 1.0f;
+float Enemy::animationTime = 0.f;
 
 Enemy::Enemy(EnemyType enemyType){
     this->setTexture(AssetManager::getSpriteSheet());
@@ -27,12 +28,19 @@ Enemy::Enemy(EnemyType enemyType){
             break;
     }
 }
+void Enemy::update() {
+    animationTime += timer.getElapsedTime().asSeconds();
+    elapsedTime   += timer.restart().asSeconds();
+}
 
-void Enemy::update() {}
+
+void Enemy::updateAnimation() {
+    sf::IntRect currentRect = this->getTextureRect();
+    currentRect.left = (currentRect.left + 16) % 32;
+    this->setTextureRect(currentRect);
+}
 
 bool Enemy::isOffCD() {
-
-    elapsedTime += timer.restart().asSeconds();
 
     if(elapsedTime > timeToShoot)
     {
@@ -43,4 +51,13 @@ bool Enemy::isOffCD() {
     }
 
     return false;
+}
+
+bool Enemy::timeToAnimate() {
+
+    return animationTime > ENEMY_ANIMATE_TIME;
+}
+
+void Enemy::resetAnimate() {
+    animationTime -= ENEMY_ANIMATE_TIME;
 }

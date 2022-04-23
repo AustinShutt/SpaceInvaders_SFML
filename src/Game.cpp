@@ -57,6 +57,17 @@ void Game::HandleInput() {
 }
 void Game::Update() {
 
+    Enemy::update();
+
+    if(Enemy::timeToAnimate())
+    {
+        for(auto& itr : enemies)
+            itr.updateAnimation();
+
+        Enemy::resetAnimate();
+    }
+
+
     enemyFire();
     updateEnemyProjectiles();
     updatePlayerProjectiles();

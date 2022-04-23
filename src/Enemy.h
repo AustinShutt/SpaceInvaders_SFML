@@ -14,12 +14,17 @@ class Enemy : public sf::Sprite {
     static sf::Clock timer;
     static float elapsedTime;
     static float timeToShoot;
+    static float animationTime;
+
 
 public:
     Enemy(EnemyType enemyType);
 
-    void update();
+    static void update();
+    void updateAnimation();
     static bool isOffCD();
+    static bool timeToAnimate();
+    static void resetAnimate();
 
 };
 
