@@ -2,6 +2,6 @@
 
 Progress Update:
 
-Built basic game loop structure and declared player, enemy, and barrier classes.
+Here's how we're looking so far:
 
-Working next on player ship and invader assets, looking for pre-built assets on itch.io, if none are reasonably appropriate, I'll draw some up in Aseprite.
+ ![Alt text](https://github.com/AustinShutt/SpaceInvaders_SFML/blob/89f5c0c6c275d3487866d87fbf7fde6a44978c25/assets/Demo1.gif)
