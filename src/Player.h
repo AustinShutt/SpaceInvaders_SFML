@@ -10,11 +10,15 @@
 #include "Definitions.h"
 
 class Player : public sf::Sprite {
+    static sf::Clock clock;
+    static float shotCooldown;
 
 public:
     Player();
 
-    void update();
+    static void update();
+    static void resetCD();
+    static bool shotOffCD();
 };
 
 

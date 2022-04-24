@@ -4,6 +4,9 @@
 
 #include "Player.h"
 
+sf::Clock Player::clock;
+float Player::shotCooldown = 0.f;
+
 Player::Player() {
     this->setTexture(AssetManager::getSpriteSheet());
     this->setTextureRect(sf::Rect(64,0,16,16));
@@ -12,5 +15,13 @@ Player::Player() {
 }
 
 void Player::update() {
+    shotCooldown+= clock.restart().asSeconds();
+}
 
+void Player::resetCD() {
+    shotCooldown = 0.f;
+}
+
+bool Player::shotOffCD() {
+    return shotCooldown > PLAYER_SHOT_CD;
 }

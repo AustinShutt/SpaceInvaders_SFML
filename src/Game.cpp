@@ -56,7 +56,7 @@ void Game::HandleInput() {
         player.move(PLAYER_MOVE_SPEED, 0);
 }
 void Game::Update() {
-
+    Player::update();
     Enemy::update();
 
     if(Enemy::timeToAnimate())
@@ -120,10 +120,10 @@ void Game::Render() {
     window.clear();
     window.draw(background);
     window.draw(player);
-    for(auto& itr: barriers) window.draw(itr);
-    for(auto& itr : enemies)      window.draw(itr);
-    for(auto& itr : projectiles) window.draw(itr);
-    for(auto& itr : enemyProj)   window.draw(itr);
+    for(int i = 0; i < barriers.size();    i++) window.draw(barriers[i]);
+    for(int i = 0; i < enemies.size();     i++) window.draw(enemies[i]);
+    for(int i = 0; i < projectiles.size(); i++) window.draw(projectiles[i]);
+    for(int i = 0; i < enemyProj.size();   i++) window.draw(enemyProj[i]);
     window.display();
 }
 
@@ -165,9 +165,14 @@ void Game::initializeEnemies() {
 void Game::shipFire() {
 
     //TODO: Add cool down to ship fire ability
+
+    if(!Player::shotOffCD()) return;
+
     Projectile proj;
     proj.setPosition(player.getPosition());
     projectiles.push_back(proj);
+
+    Player::resetCD();
 }
 
 void Game::enemyFire() {
