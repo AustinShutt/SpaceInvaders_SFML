@@ -61,12 +61,28 @@ void Game::Update() {
 
     if(Enemy::timeToAnimate())
     {
-        for(auto& itr : enemies)
-            itr.updateAnimation();
+        for(int i = 0; i < enemies.size(); i++)
+            enemies[i].updateAnimation();
+
+        for(std::list<Enemy>::iterator itr = destroyed.begin(); itr != destroyed.end(); ++itr)
+            itr->updateAnimation();
 
         Enemy::resetAnimate();
-    }
 
+        if(!destroyed.empty() && destroyed.front().explodeComplete())
+            destroyed.pop_front();
+
+        if(!Player::isAlive())
+        {
+            player.updateDeathAnimation();
+        }
+
+        if(!Player::isAlive() && player.animationComplete())
+        {
+            lifeDisplay.removeLife();
+            player.respawn();
+        }
+    }
 
     enemyFire();
     updateEnemyProjectiles();
@@ -74,18 +90,18 @@ void Game::Update() {
 
     if(movDir == EnemyMove::RIGHT)
     {
-        for(auto& itr : enemies)
-            itr.move(ENEMY_MOVE_SPEED, 0);
+        for(int i = 0; i < enemies.size(); i++)
+            enemies[i].move(ENEMY_MOVE_SPEED, 0);
     }
     else if(movDir == EnemyMove::LEFT)
     {
-        for(auto& itr : enemies)
-            itr.move(-ENEMY_MOVE_SPEED, 0);
+        for(int i = 0; i < enemies.size(); i++)
+            enemies[i].move(-ENEMY_MOVE_SPEED, 0);
     }
     else
     {
-        for(auto& itr : enemies)
-            itr.move(0, 4);
+        for(int i = 0; i < enemies.size(); i++)
+            enemies[i].move(0, 4);
     }
 
 
@@ -99,15 +115,15 @@ void Game::Update() {
         return;
     }
 
-    for(auto& itr : enemies)
+    for(int i = 0; i < enemies.size(); i++)
     {
-        if(itr.getPosition().x + 20 > 256)
+        if(enemies[i].getPosition().x + 20 > 256)
         {
             prevDir= EnemyMove::RIGHT;
             movDir = EnemyMove::DOWN;
             break;
         }
-        else if(itr.getPosition().x - 2 < 0)
+        else if(enemies[i].getPosition().x - 2 < 0)
         {
             prevDir=EnemyMove::LEFT;
             movDir = EnemyMove::DOWN;
@@ -119,11 +135,17 @@ void Game::Update() {
 void Game::Render() {
     window.clear();
     window.draw(background);
-    window.draw(player);
+    if(Player::isAlive() == true)
+        window.draw(player);
+    else
+        window.draw(player.getDeathAnimation());
+
     for(int i = 0; i < barriers.size();    i++) window.draw(barriers[i]);
+    for(std::list<Enemy>::iterator itr = destroyed.begin(); itr != destroyed.end(); ++itr) window.draw(*itr);
     for(int i = 0; i < enemies.size();     i++) window.draw(enemies[i]);
     for(int i = 0; i < projectiles.size(); i++) window.draw(projectiles[i]);
     for(int i = 0; i < enemyProj.size();   i++) window.draw(enemyProj[i]);
+    window.draw(lifeDisplay);
     window.display();
 }
 
@@ -164,8 +186,6 @@ void Game::initializeEnemies() {
 
 void Game::shipFire() {
 
-    //TODO: Add cool down to ship fire ability
-
     if(!Player::shotOffCD()) return;
 
     Projectile proj;
@@ -188,7 +208,7 @@ void Game::enemyFire() {
 
 void Game::updatePlayerProjectiles() {
 
-    for(auto& itr : projectiles) itr.move({0, -PROJECTILE_SPEED});
+    for(int i = 0; i < projectiles.size(); i++) projectiles[i].move({0, -PROJECTILE_SPEED});
 
     for(int k = 0; k < projectiles.size();)
     {
@@ -203,6 +223,8 @@ void Game::updatePlayerProjectiles() {
             }
             else if(enemies[i].getGlobalBounds().intersects(projectiles[k].getGlobalBounds()))
             {
+                destroyed.push_back(enemies[i]);
+                destroyed.back().destroy();
                 enemies.erase(enemies.begin() + i);
                 hitRegistered = true;
                 break;
@@ -246,7 +268,7 @@ void Game::updatePlayerProjectiles() {
 }
 
 void Game::updateEnemyProjectiles() {
-    for(auto& itr : enemyProj)   itr.move({0,  PROJECTILE_SPEED});
+    for(int i = 0; i < enemyProj.size(); i++)   enemyProj[i].move({0,  PROJECTILE_SPEED});
 
     for(int i = 0; i < enemyProj.size(); )
     {
@@ -256,8 +278,8 @@ void Game::updateEnemyProjectiles() {
         }
         else if(player.getGlobalBounds().intersects(enemyProj[i].getGlobalBounds()))
         {
-            //TODO: Player Hit, lose life.
             enemyProj.erase(enemyProj.begin() + i);
+            player.destroy();
         }
         else
         {

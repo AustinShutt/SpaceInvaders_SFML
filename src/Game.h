@@ -9,16 +9,21 @@
 #include <SFML/Graphics.hpp>
 #include "Definitions.h"
 #include "Player.h"
+#include "LifeDisplay.h"
 #include "Enemy.h"
 #include "Projectile.h"
 #include "Barrier.h"
 #include "Background.h"
+#include <queue>
+#include <list>
 
 class Game{
     sf::RenderWindow        window;
     Player                  player;
+    LifeDisplay             lifeDisplay;
     Background              background;
     std::vector<Enemy>      enemies;
+    std::list<Enemy>        destroyed;
     std::vector<Barrier>    barriers;
     std::vector<Projectile> projectiles;
     std::vector<Projectile> enemyProj;

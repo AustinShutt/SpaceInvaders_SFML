@@ -6,8 +6,8 @@
 #define INC_28_SPACEINVADERS_ENEMY_H
 
 #include <SFML/Graphics.hpp>
-#include "AssetManager.h"
 #include <cstdlib>
+#include "AssetManager.h"
 #include "Definitions.h"
 
 class Enemy : public sf::Sprite {
@@ -16,6 +16,8 @@ class Enemy : public sf::Sprite {
     static float timeToShoot;
     static float animationTime;
 
+    bool isDestroyed;
+    int explodeFrame;
 
 public:
     Enemy(EnemyType enemyType);
@@ -25,6 +27,8 @@ public:
     static bool isOffCD();
     static bool timeToAnimate();
     static void resetAnimate();
+    void destroy();
+    bool explodeComplete();
 
 };
 

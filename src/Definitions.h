@@ -5,6 +5,7 @@
 #ifndef INC_28_SPACEINVADERS_DEFINITIONS_H
 #define INC_28_SPACEINVADERS_DEFINITIONS_H
 
+enum class FrameTitle{};
 enum class EnemyType {ONE = 0, TWO, THREE, FOUR};
 enum class EnemyMove {RIGHT, DOWN, LEFT};
 
