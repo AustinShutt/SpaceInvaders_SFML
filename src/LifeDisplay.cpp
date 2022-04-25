@@ -21,7 +21,7 @@ void LifeDisplay::draw(sf::RenderTarget &target, sf::RenderStates states) const 
 void LifeDisplay::addLife() {
     sf::Sprite life;
     life.setTexture(AssetManager::getSpriteSheet());
-    life.setTextureRect(sf::Rect(64,0,16,16));
+    life.setTextureRect(sf::IntRect(64,0,16,16));
 
     if(lives.empty())
        life.setPosition(5, VIEW_HEIGHT-20);

@@ -6,6 +6,6 @@
 
 Barrier::Barrier() {
     this->setTexture(AssetManager::getSpriteSheet());
-    this->setTextureRect(sf::Rect(48,16,32,16));
+    this->setTextureRect(sf::IntRect(48,16,32,16));
     this->setOrigin(16,8);
 }

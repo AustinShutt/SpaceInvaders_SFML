@@ -51,9 +51,11 @@ void Game::HandleInput() {
     }
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-        player.move(-PLAYER_MOVE_SPEED, 0);
+        if(player.getPosition().x > player.getGlobalBounds().width/2)
+            player.move(-PLAYER_MOVE_SPEED, 0);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-        player.move(PLAYER_MOVE_SPEED, 0);
+        if(player.getPosition().x < VIEW_WIDTH - player.getGlobalBounds().width/2)
+            player.move(PLAYER_MOVE_SPEED, 0);
 }
 void Game::Update() {
     Player::update();

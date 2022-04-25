@@ -17,16 +17,16 @@ Enemy::Enemy(EnemyType enemyType)
     switch(enemyType)
     {
         case EnemyType::ONE:
-            this->setTextureRect(sf::Rect(0,0,16,16));
+            this->setTextureRect(sf::IntRect(0,0,16,16));
             break;
         case EnemyType::TWO:
-            this->setTextureRect(sf::Rect(0,16,16,16));
+            this->setTextureRect(sf::IntRect(0,16,16,16));
             break;
         case EnemyType::THREE:
-            this->setTextureRect(sf::Rect(0,32,16,16));
+            this->setTextureRect(sf::IntRect(0,32,16,16));
             break;
         case EnemyType::FOUR:
-            this->setTextureRect(sf::Rect(0,48,16,16));
+            this->setTextureRect(sf::IntRect(0,48,16,16));
             break;
     }
 }
