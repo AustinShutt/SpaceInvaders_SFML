@@ -62,10 +62,10 @@ void Game::Update() {
     Enemy::update();
 
     enemyFire();
-    updateAnimations();
     updateEnemyProjectiles();
     updatePlayerProjectiles();
     updateEnemyMovement();
+    updateShipAnimations();
 }
 void Game::Render() {
     window.clear();
@@ -143,7 +143,7 @@ void Game::enemyFire() {
 }
 
 
-void Game::updateAnimations() {
+void Game::updateShipAnimations() {
 
     if(Enemy::timeToAnimate())
     {
@@ -226,6 +226,10 @@ void Game::updatePlayerProjectiles() {
         {
             if(barriers[j].getGlobalBounds().intersects(projectiles[i].getGlobalBounds()))
             {
+                barriers[j].hitRegister();
+                if(barriers[j].isDestroyed())
+                    barriers.erase(barriers.begin() + j);
+
                 hitDetected = true;
                 break;
             }
@@ -269,6 +273,10 @@ void Game::updateEnemyProjectiles() {
         {
             if(barriers[j].getGlobalBounds().intersects(enemyProj[i].getGlobalBounds()))
             {
+                barriers[j].hitRegister();
+                if(barriers[j].isDestroyed())
+                    barriers.erase(barriers.begin() + j);
+
                 hitDetected = true;
                 break;
             }

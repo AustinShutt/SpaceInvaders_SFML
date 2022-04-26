@@ -12,6 +12,7 @@ std::array<sf::IntRect, 3> AssetManager::explodeFrames{
     sf::IntRect(32,64,16,16)
 };
 
+
 void AssetManager::loadAssets() {
     spriteSheet.loadFromFile("../assets/si_sheet.png");
 }

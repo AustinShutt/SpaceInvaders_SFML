@@ -10,8 +10,12 @@
 #include "Definitions.h"
 
 class Barrier : public sf::Sprite{
+    static std::array<sf::IntRect, 4> barrierFrames;
+    int lifeCount = 3;
 public:
     Barrier();
+    void hitRegister();
+    bool isDestroyed();
 };
 
 

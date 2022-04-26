@@ -14,7 +14,7 @@ public:
     static void loadAssets();
     static const sf::Texture& getSpriteSheet();
     static std::array<sf::IntRect, 3> explodeFrames;
-    static std::array<sf::IntRect, 3> barrierFrames;
+
 };
 
 #endif //INC_28_SPACEINVADERS_ASSETMANAGER_H

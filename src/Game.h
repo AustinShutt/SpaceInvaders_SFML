@@ -45,7 +45,7 @@ private:
     void shipFire();
     void enemyFire();
 
-    void updateAnimations();
+    void updateShipAnimations();
     void updatePlayerProjectiles();
     void updateEnemyProjectiles();
     void updateEnemyMovement();
