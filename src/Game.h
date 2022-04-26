@@ -14,6 +14,7 @@
 #include "Projectile.h"
 #include "Barrier.h"
 #include "Background.h"
+#include "TopDisplay.h"
 #include <queue>
 #include <list>
 
@@ -29,6 +30,7 @@ class Game{
     std::vector<Projectile> enemyProj;
     EnemyMove               movDir;
     EnemyMove               prevDir;
+    TopDisplay              topDisplay;
 
 public:
     Game();

@@ -6,7 +6,9 @@
 
 Game::Game() {
     window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Space Invaders");    //Creates Window
-    sf::View view({VIEW_WIDTH/2.f, VIEW_HEIGHT/2.f},{VIEW_WIDTH, VIEW_HEIGHT} );            //Sets window view
+    sf::View view({VIEW_WIDTH/2.f, VIEW_HEIGHT/2.f},{VIEW_WIDTH, VIEW_HEIGHT} );//Sets window view
+
+
     window.setView(view);
 
     initializeBarriers();
@@ -82,6 +84,7 @@ void Game::Render() {
     for(int i = 0; i < projectiles.size(); i++) window.draw(projectiles[i]);
     for(int i = 0; i < enemyProj.size();   i++) window.draw(enemyProj[i]);
     window.draw(lifeDisplay);
+    window.draw(topDisplay);
 
     window.display();
 }
@@ -198,6 +201,7 @@ void Game::updatePlayerProjectiles() {
                 destroyed.back().destroy();
                 enemies.erase(enemies.begin() + i);
                 hitRegistered = true;
+                topDisplay.addToScore(100);
                 break;
             }
             else
