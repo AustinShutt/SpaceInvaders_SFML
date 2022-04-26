@@ -5,6 +5,7 @@
 #include "AssetManager.h"
 
 sf::Texture AssetManager::spriteSheet;
+
 std::array<sf::IntRect, 3> AssetManager::explodeFrames{
     sf::IntRect(32,32,16,16),
     sf::IntRect(32,48,16,16),

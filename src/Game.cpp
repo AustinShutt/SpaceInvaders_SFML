@@ -61,82 +61,16 @@ void Game::Update() {
     Player::update();
     Enemy::update();
 
-    if(Enemy::timeToAnimate())
-    {
-        for(int i = 0; i < enemies.size(); i++)
-            enemies[i].updateAnimation();
-
-        for(std::list<Enemy>::iterator itr = destroyed.begin(); itr != destroyed.end(); ++itr)
-            itr->updateAnimation();
-
-        Enemy::resetAnimate();
-
-        if(!destroyed.empty() && destroyed.front().explodeComplete())
-            destroyed.pop_front();
-
-        if(!Player::isAlive())
-        {
-            player.updateDeathAnimation();
-        }
-
-        if(!Player::isAlive() && player.animationComplete())
-        {
-            lifeDisplay.removeLife();
-            player.respawn();
-        }
-    }
-
     enemyFire();
+    updateAnimations();
     updateEnemyProjectiles();
     updatePlayerProjectiles();
-
-    if(movDir == EnemyMove::RIGHT)
-    {
-        for(int i = 0; i < enemies.size(); i++)
-            enemies[i].move(ENEMY_MOVE_SPEED, 0);
-    }
-    else if(movDir == EnemyMove::LEFT)
-    {
-        for(int i = 0; i < enemies.size(); i++)
-            enemies[i].move(-ENEMY_MOVE_SPEED, 0);
-    }
-    else
-    {
-        for(int i = 0; i < enemies.size(); i++)
-            enemies[i].move(0, 4);
-    }
-
-
-    if(movDir == EnemyMove::DOWN)
-    {
-        if(prevDir == EnemyMove::RIGHT)
-            movDir = EnemyMove::LEFT;
-        else
-            movDir = EnemyMove::RIGHT;
-
-        return;
-    }
-
-    for(int i = 0; i < enemies.size(); i++)
-    {
-        if(enemies[i].getPosition().x + 20 > 256)
-        {
-            prevDir= EnemyMove::RIGHT;
-            movDir = EnemyMove::DOWN;
-            break;
-        }
-        else if(enemies[i].getPosition().x - 2 < 0)
-        {
-            prevDir=EnemyMove::LEFT;
-            movDir = EnemyMove::DOWN;
-            break;
-        }
-    }
+    updateEnemyMovement();
 }
-
 void Game::Render() {
     window.clear();
     window.draw(background);
+
     if(Player::isAlive() == true)
         window.draw(player);
     else
@@ -148,6 +82,7 @@ void Game::Render() {
     for(int i = 0; i < projectiles.size(); i++) window.draw(projectiles[i]);
     for(int i = 0; i < enemyProj.size();   i++) window.draw(enemyProj[i]);
     window.draw(lifeDisplay);
+
     window.display();
 }
 
@@ -207,6 +142,40 @@ void Game::enemyFire() {
     }
 }
 
+
+void Game::updateAnimations() {
+
+    if(Enemy::timeToAnimate())
+    {
+        //Iterates through alive enemies and updates their animation
+        for(int i = 0; i < enemies.size(); i++)
+            enemies[i].updateAnimation();
+
+        //Iterates through the list of destroyed enemies and updates their animation
+        for(std::__cxx11::list<Enemy>::iterator itr = destroyed.begin(); itr != destroyed.end(); ++itr)
+            itr->updateAnimation();
+
+        //Resets the clock value
+        Enemy::resetAnimate();
+
+        //Checks if the oldest destroyed enemy has finished animation, pops if complete
+        if(!destroyed.empty() && destroyed.front().explodeComplete())
+            destroyed.pop_front();
+
+        //If player is dead, update death animation
+        if(!Player::isAlive())
+        {
+            player.updateDeathAnimation();
+        }
+
+        //If player death animation is complete, respawn player
+        if(!Player::isAlive() && player.animationComplete())
+        {
+            lifeDisplay.removeLife();
+            player.respawn();
+        }
+    }
+}
 
 void Game::updatePlayerProjectiles() {
 
@@ -270,15 +239,18 @@ void Game::updatePlayerProjectiles() {
 }
 
 void Game::updateEnemyProjectiles() {
+
+    //Moves the projectile in down direction
     for(int i = 0; i < enemyProj.size(); i++)   enemyProj[i].move({0,  PROJECTILE_SPEED});
 
+    //Checks if projectile has impacted the player ship or left screen bounds
     for(int i = 0; i < enemyProj.size(); )
     {
-        if(enemyProj[i].getPosition().y > VIEW_HEIGHT)
+        if(enemyProj[i].getPosition().y > VIEW_HEIGHT)                                          //delete if left screen bounds
         {
             enemyProj.erase(enemyProj.begin() + i);
         }
-        else if(player.getGlobalBounds().intersects(enemyProj[i].getGlobalBounds()))
+        else if(player.getGlobalBounds().intersects(enemyProj[i].getGlobalBounds()))    //if hit player, delete projectile, destroy player
         {
             enemyProj.erase(enemyProj.begin() + i);
             player.destroy();
@@ -289,6 +261,7 @@ void Game::updateEnemyProjectiles() {
         }
     }
 
+    //Checks if projectile has impacted any barrier, removes if true
     for(int i = 0; i < enemyProj.size();)
     {
         bool hitDetected = false;
@@ -305,5 +278,53 @@ void Game::updateEnemyProjectiles() {
             enemyProj.erase(enemyProj.begin() + i);
         else
            i++;
+    }
+}
+
+void Game::updateEnemyMovement() {
+
+    //Moves all enemies based on current move direction
+    if(movDir == EnemyMove::RIGHT)
+    {
+        for(int i = 0; i < enemies.size(); i++)
+            enemies[i].move(ENEMY_MOVE_SPEED, 0);
+    }
+    else if(movDir == EnemyMove::LEFT)
+    {
+        for(int i = 0; i < enemies.size(); i++)
+            enemies[i].move(-ENEMY_MOVE_SPEED, 0);
+    }
+    else
+    {
+        for(int i = 0; i < enemies.size(); i++)
+            enemies[i].move(0, 4);
+    }
+
+    //Changes move direction from down to either left or right based on previous direction
+    if(movDir == EnemyMove::DOWN)
+    {
+        if(prevDir == EnemyMove::RIGHT)
+            movDir = EnemyMove::LEFT;
+        else
+            movDir = EnemyMove::RIGHT;
+
+        return;
+    }
+
+    //Determines if the direction of the enemies need changed before next frame
+    for(int i = 0; i < enemies.size(); i++)
+    {
+        if(enemies[i].getPosition().x + 20 > 256)
+        {
+            prevDir = EnemyMove::RIGHT;
+            movDir = EnemyMove::DOWN;
+            break;
+        }
+        else if(enemies[i].getPosition().x - 2 < 0)
+        {
+            prevDir = EnemyMove::LEFT;
+            movDir = EnemyMove::DOWN;
+            break;
+        }
     }
 }
