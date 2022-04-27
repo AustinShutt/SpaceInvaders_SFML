@@ -15,6 +15,7 @@
 #include "Barrier.h"
 #include "Background.h"
 #include "TopDisplay.h"
+#include "UFO.h"
 #include <queue>
 #include <list>
 
@@ -25,9 +26,11 @@ class Game{
     Background              background;
     std::vector<Enemy>      enemies;
     std::list<Enemy>        destroyed;
+    std::list<UFO>          ufos;
     std::vector<Barrier>    barriers;
     std::vector<Projectile> projectiles;
     std::vector<Projectile> enemyProj;
+
     EnemyMove               movDir;
     EnemyMove               prevDir;
     TopDisplay              topDisplay;
@@ -51,6 +54,7 @@ private:
     void updatePlayerProjectiles();
     void updateEnemyProjectiles();
     void updateEnemyMovement();
+    void updateUFO();
 };
 
 

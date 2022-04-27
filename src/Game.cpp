@@ -17,7 +17,7 @@ Game::Game() {
 
 void Game::Run() {
 
-    sf::Clock clock;            //SFML clock, reset each cycle and returns time in seconds between calls
+    sf::Clock clock;            //SFML clock, resetTimer each cycle and returns time in seconds between calls
     float elapsedTime = 0.f;    //Holds accumulated value of time between cycles
 
     while (window.isOpen())
@@ -67,6 +67,7 @@ void Game::Update() {
     updateEnemyProjectiles();
     updatePlayerProjectiles();
     updateEnemyMovement();
+    updateUFO();
     updateShipAnimations();
 }
 void Game::Render() {
@@ -83,6 +84,7 @@ void Game::Render() {
     for(int i = 0; i < enemies.size();     i++) window.draw(enemies[i]);
     for(int i = 0; i < projectiles.size(); i++) window.draw(projectiles[i]);
     for(int i = 0; i < enemyProj.size();   i++) window.draw(enemyProj[i]);
+    for(std::list<UFO>::iterator itr = ufos.begin(); itr != ufos.end(); ++itr) window.draw(*itr);
     window.draw(lifeDisplay);
     window.draw(topDisplay);
 
@@ -155,8 +157,17 @@ void Game::updateShipAnimations() {
             enemies[i].updateAnimation();
 
         //Iterates through the list of destroyed enemies and updates their animation
-        for(std::__cxx11::list<Enemy>::iterator itr = destroyed.begin(); itr != destroyed.end(); ++itr)
+        for(std::list<Enemy>::iterator itr = destroyed.begin(); itr != destroyed.end(); ++itr)
             itr->updateAnimation();
+
+        //Iterates through the list of destroyed enemies and updates their animation
+        for(std::list<UFO>::iterator itr = ufos.begin(); itr != ufos.end(); ++itr){
+            if(itr->updateDestroyed())
+            {
+                ufos.clear();
+                break;
+            }
+        }
 
         //Resets the clock value
         Enemy::resetAnimate();
@@ -244,6 +255,35 @@ void Game::updatePlayerProjectiles() {
         else
             i++;
     }
+
+
+    for(int k = 0; k < projectiles.size();)
+    {
+        bool hitRegistered = false;
+
+        for(std::list<UFO>::iterator itr = ufos.begin(); itr != ufos.end(); )
+        {
+            if(itr->getGlobalBounds().intersects(projectiles[k].getGlobalBounds()))
+            {
+               itr->destroy();
+               hitRegistered = true;
+               topDisplay.addToScore(500);
+               break;
+            }
+            else
+            {
+                ++itr;
+            }
+        }
+
+        if(hitRegistered)
+            projectiles.erase(projectiles.begin() + k);
+        else
+            ++k;
+    }
+
+
+
 }
 
 void Game::updateEnemyProjectiles() {
@@ -339,4 +379,34 @@ void Game::updateEnemyMovement() {
             break;
         }
     }
+}
+
+void Game::updateUFO() {
+
+    //Spawns a UFO
+    if(UFO::spawnTime())
+    {
+        UFO ufo;
+        UFO::resetTimer();
+
+        ufos.push_back(ufo);
+    }
+
+    //Updates movement of UFO
+    for(std::list<UFO>::iterator itr = ufos.begin(); itr != ufos.end(); ++itr)
+    {
+        if(itr->isAlive())
+        {
+            if(UFO::getDirection() == EnemyMove::LEFT)
+                itr->move({-.5, 0});
+            else
+                itr->move({+.5, 0});
+        }
+        else if(itr->getPosition().x > VIEW_WIDTH + 20 || itr->getPosition().x < -20)
+        {
+            ufos.erase(itr);
+            break;
+        }
+    }
+
 }
