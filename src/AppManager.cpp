@@ -14,7 +14,6 @@ void AppManager::Init() {
     window.setView(view);
 
     addState(new MainMenu(window));
-    //addState(new Game(window));
 }
 
 void AppManager::Run() {

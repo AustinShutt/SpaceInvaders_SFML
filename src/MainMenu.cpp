@@ -3,6 +3,7 @@
 //
 
 #include "MainMenu.h"
+#include "AppManager.h"
 
 MainMenu::MainMenu(sf::RenderWindow &window) :window(window) {
     playButton.setText("PLAY");
@@ -19,6 +20,17 @@ void MainMenu::HandleInput() {
     {
         if (event.type == sf::Event::Closed)
             window.close();
+
+        if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button  == sf::Mouse::Left)
+        {
+            sf::Vector2i coords = sf::Mouse::getPosition(window);
+            sf::Vector2f mousePos = window.mapPixelToCoords(coords);
+
+            if(exitButton.getBounds().contains(mousePos))
+                window.close();
+            if(playButton.getBounds().contains(mousePos))
+                AppManager::addState(new Game(window));
+        }
     }
 }
 
