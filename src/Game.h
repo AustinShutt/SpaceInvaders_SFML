@@ -7,18 +7,21 @@
 
 
 #include <SFML/Graphics.hpp>
+#include <queue>
+#include <list>
+
+#include "BaseState.h"
 #include "Definitions.h"
 #include "Player.h"
-#include "LifeDisplay.h"
 #include "Enemy.h"
 #include "Projectile.h"
 #include "Barrier.h"
 #include "Background.h"
 #include "TopDisplay.h"
+#include "LifeDisplay.h"
 #include "UFO.h"
-#include "BaseState.h"
-#include <queue>
-#include <list>
+#include "Button.h"
+
 
 class Game : public BaseState{
     sf::RenderWindow&       window;
@@ -34,6 +37,9 @@ class Game : public BaseState{
     EnemyMove               movDir;
     EnemyMove               prevDir;
     TopDisplay              topDisplay;
+    Button                  menuButton;
+    sf::Text                gameOverText;
+    bool                    gameOver;
 
 public:
     Game(sf::RenderWindow& window);
@@ -45,6 +51,7 @@ public:
 private:
     void initializeBarriers();
     void initializeEnemies();
+    void initializeText();
 
     void shipFire();
     void enemyFire();
@@ -54,9 +61,9 @@ private:
     void updateEnemyProjectiles();
     void updateEnemyMovement();
     void updateUFO();
+    void updateEndOfWave();
+    void updateEndGameStatus();
+    void updateMenuButton();
 };
-
-
-
 
 #endif //INC_28_SPACEINVADERS_GAME_H

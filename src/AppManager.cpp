@@ -41,6 +41,8 @@ void AppManager::addState(BaseState *state) {
 }
 
 void AppManager::popState() {
+    BaseState* deleting = states.top();
     states.pop();
+    delete deleting;
 }
 

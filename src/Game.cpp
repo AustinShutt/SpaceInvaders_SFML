@@ -3,15 +3,17 @@
 //
 
 #include "Game.h"
+#include "AppManager.h"
 
-Game::Game(sf::RenderWindow& window) : window(window) {
+Game::Game(sf::RenderWindow& window) : window(window), gameOver(false) {
 
+    initializeText();
     initializeBarriers();
     initializeEnemies();
+    player.respawn();
 }
 
 void Game::HandleInput() {
-
     //Poll events
     sf::Event event;
     while (window.pollEvent(event))
@@ -19,10 +21,19 @@ void Game::HandleInput() {
         if (event.type == sf::Event::Closed)
             window.close();
 
-        if(event.type == sf::Event::KeyPressed)
+        if(!gameOver && event.type == sf::Event::KeyPressed)
         {
             if(event.key.code == sf::Keyboard::Space)
                 shipFire();
+        }
+
+        if(gameOver && event.type == sf::Event::MouseButtonPressed)
+        {
+            if(event.mouseButton.button == sf::Mouse::Left)
+            {
+                AppManager::popState();
+                return;
+            }
         }
     }
 
@@ -35,33 +46,49 @@ void Game::HandleInput() {
 }
 void Game::Update() {
 
-    Player::update();
-    Enemy::update();
-    enemyFire();
-    updateEnemyProjectiles();
-    updatePlayerProjectiles();
-    updateEnemyMovement();
-    updateUFO();
-    updateShipAnimations();
+    if(!gameOver)
+    {
+        Player::update();
+        Enemy::update();
+        enemyFire();
+        updateEnemyProjectiles();
+        updatePlayerProjectiles();
+        updateEnemyMovement();
+        updateUFO();
+        updateShipAnimations();
+        updateEndGameStatus();
+        updateEndOfWave();
+    }
+    else
+    {
+        updateMenuButton();
+    }
 }
 void Game::Render() {
     window.clear();
     window.draw(background);
 
-    if(Player::isAlive())
-        window.draw(player);
-    else
-        window.draw(player.getDeathAnimation());
+    if(!gameOver)
+    {
+        if(Player::isAlive())
+            window.draw(player);
+        else
+            window.draw(player.getDeathAnimation());
 
-    for(int i = 0; i < barriers.size();    i++) window.draw(barriers[i]);
-    for(std::list<Enemy>::iterator itr = destroyed.begin(); itr != destroyed.end(); ++itr) window.draw(*itr);
-    for(int i = 0; i < enemies.size();     i++) window.draw(enemies[i]);
-    for(int i = 0; i < projectiles.size(); i++) window.draw(projectiles[i]);
-    for(int i = 0; i < enemyProj.size();   i++) window.draw(enemyProj[i]);
-    for(std::list<UFO>::iterator itr = ufos.begin(); itr != ufos.end(); ++itr) window.draw(*itr);
+        for(std::list<UFO>::iterator   itr = ufos.begin(); itr != ufos.end();           ++itr) window.draw(*itr);
+        for(std::list<Enemy>::iterator itr = destroyed.begin(); itr != destroyed.end(); ++itr) window.draw(*itr);
+        for(int i = 0; i < barriers.size();    i++) window.draw(barriers[i]);
+        for(int i = 0; i < enemies.size();     i++) window.draw(enemies[i]);
+        for(int i = 0; i < projectiles.size(); i++) window.draw(projectiles[i]);
+        for(int i = 0; i < enemyProj.size();   i++) window.draw(enemyProj[i]);
+    }
+    else
+    {
+        window.draw(menuButton);
+        window.draw(gameOverText);
+    }
     window.draw(lifeDisplay);
     window.draw(topDisplay);
-
     window.display();
 }
 
@@ -75,6 +102,7 @@ void Game::initializeBarriers() {
     c.setPosition({64 * 3.f - OFFSET, VIEW_HEIGHT*5.f/6.f});
     d.setPosition({64 * 4.f - OFFSET, VIEW_HEIGHT*5.f/6.f});
 
+    barriers.clear();
     barriers.push_back(a);
     barriers.push_back(b);
     barriers.push_back(c);
@@ -98,6 +126,18 @@ void Game::initializeEnemies() {
             enemies.push_back(temp);
         }
     }
+}
+
+void Game::initializeText() {
+    gameOverText.setFont(AssetManager::getFont());
+    gameOverText.setString("GAME OVER");
+    gameOverText.setPosition(VIEW_WIDTH / 2, VIEW_HEIGHT / 3);
+    gameOverText.setCharacterSize(20);
+    gameOverText.setOrigin(gameOverText.getGlobalBounds().width/2, 0);
+
+
+    menuButton.setText("Menu");
+    menuButton.setPosition({VIEW_WIDTH / 2, VIEW_HEIGHT / 2});
 }
 
 void Game::shipFire() {
@@ -256,8 +296,6 @@ void Game::updatePlayerProjectiles() {
             ++k;
     }
 
-
-
 }
 
 void Game::updateEnemyProjectiles() {
@@ -383,4 +421,34 @@ void Game::updateUFO() {
         }
     }
 
+}
+
+void Game::updateEndGameStatus() {
+    if(lifeDisplay.numLives() == 0 && !Player::isAlive())
+        gameOver = true;
+
+    for(int i = 0; i < enemies.size(); i++) {
+        if (enemies[i].getPosition().y > player.getPosition().y) {
+            gameOver = true;
+            break;
+        }
+    }
+}
+
+void Game::updateEndOfWave() {
+    if(enemies.size() != 0) return;
+
+    initializeEnemies();
+    initializeBarriers();
+    topDisplay.nextWave();
+}
+
+void Game::updateMenuButton() {
+    menuButton.lowlight();
+
+    sf::Vector2i coords = sf::Mouse::getPosition(window);
+    sf::Vector2f mousePos = window.mapPixelToCoords(coords);
+
+    if(menuButton.getBounds().contains(mousePos))
+        menuButton.highlight();
 }

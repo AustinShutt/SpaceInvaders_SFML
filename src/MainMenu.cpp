@@ -10,7 +10,7 @@ MainMenu::MainMenu(sf::RenderWindow &window) :window(window) {
     exitButton.setText("EXIT");
 
     playButton.setPosition({VIEW_WIDTH/2., VIEW_HEIGHT/3.});
-    exitButton.setPosition({VIEW_WIDTH/2., VIEW_HEIGHT * 2./ 3.});
+    exitButton.setPosition({VIEW_WIDTH/2., VIEW_HEIGHT / 2.});
 }
 
 void MainMenu::HandleInput() {
