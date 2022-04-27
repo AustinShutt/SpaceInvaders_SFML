@@ -9,7 +9,7 @@
 #include <SFML/Graphics.hpp>
 #include "Game.h"
 #include <stack>
-#include "BaseState.h"
+#include "MainMenu.h"
 
 class AppManager {
     static std::stack<BaseState*> states;
