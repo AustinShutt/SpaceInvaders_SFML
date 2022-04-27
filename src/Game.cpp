@@ -4,36 +4,10 @@
 
 #include "Game.h"
 
-Game::Game() {
-    window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Space Invaders");    //Creates Window
-    sf::View view({VIEW_WIDTH/2.f, VIEW_HEIGHT/2.f},{VIEW_WIDTH, VIEW_HEIGHT} );//Sets window view
-
-
-    window.setView(view);
+Game::Game(sf::RenderWindow& window) : window(window) {
 
     initializeBarriers();
     initializeEnemies();
-}
-
-void Game::Run() {
-
-    sf::Clock clock;            //SFML clock, resetTimer each cycle and returns time in seconds between calls
-    float elapsedTime = 0.f;    //Holds accumulated value of time between cycles
-
-    while (window.isOpen())
-    {
-        elapsedTime += clock.restart().asSeconds(); //Resets clock, adds time between cycle
-
-        while (elapsedTime >= TIME_STEP)            //Limits update to 60fps
-        {
-            HandleInput();                          //Accepts input from user
-            Update();                               //Updates the scene
-
-            elapsedTime -= TIME_STEP;               //Removes value of time step from time accumulator
-        }
-
-        Render();                                   //Draws the scene to the SFML window
-    }
 }
 
 void Game::HandleInput() {
@@ -60,9 +34,9 @@ void Game::HandleInput() {
             player.move(PLAYER_MOVE_SPEED, 0);
 }
 void Game::Update() {
+
     Player::update();
     Enemy::update();
-
     enemyFire();
     updateEnemyProjectiles();
     updatePlayerProjectiles();
@@ -74,7 +48,7 @@ void Game::Render() {
     window.clear();
     window.draw(background);
 
-    if(Player::isAlive() == true)
+    if(Player::isAlive())
         window.draw(player);
     else
         window.draw(player.getDeathAnimation());

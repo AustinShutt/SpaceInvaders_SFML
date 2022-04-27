@@ -16,11 +16,12 @@
 #include "Background.h"
 #include "TopDisplay.h"
 #include "UFO.h"
+#include "BaseState.h"
 #include <queue>
 #include <list>
 
-class Game{
-    sf::RenderWindow        window;
+class Game : public BaseState{
+    sf::RenderWindow&       window;
     Player                  player;
     LifeDisplay             lifeDisplay;
     Background              background;
@@ -30,20 +31,18 @@ class Game{
     std::vector<Barrier>    barriers;
     std::vector<Projectile> projectiles;
     std::vector<Projectile> enemyProj;
-
     EnemyMove               movDir;
     EnemyMove               prevDir;
     TopDisplay              topDisplay;
 
 public:
-    Game();
-    void Run();
+    Game(sf::RenderWindow& window);
 
-private:
     void HandleInput();
     void Update();
     void Render();
 
+private:
     void initializeBarriers();
     void initializeEnemies();
 

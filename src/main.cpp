@@ -1,15 +1,15 @@
-#include "Game.h"
+
 #include <cstdlib>
 #include <ctime>
+#include "AppManager.h"
 
 int main()
 {
-
     srand((unsigned) time(nullptr) );
 
     AssetManager::loadAssets();
-    Game game;
-    game.Run();
+    AppManager::Init();
+    AppManager::Run();
 
     return 0;
 }
