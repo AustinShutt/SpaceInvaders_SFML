@@ -1,7 +1,9 @@
 # SpaceInvaders_SFML
+<strong>Space Invaders</strong> <br/><br/>
+Space Bar - Shoot <br/>
+A / Left Arrow - Move Left <br/>
+D / Right Arrow - Move Right <br/>
 
-Progress Update:
+Here's how the game turned out:
 
-Here's how we're looking so far:
-
- ![Alt text](https://github.com/AustinShutt/SpaceInvaders_SFML/blob/89f5c0c6c275d3487866d87fbf7fde6a44978c25/assets/Demo1.gif)
+ ![Alt text](https://github.com/AustinShutt/SpaceInvaders_SFML/blob/eb9b16c3111e5c4c59c39b43123e35e60f75c6fc/assets/Demo2.gif)
