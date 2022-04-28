@@ -8,12 +8,11 @@ std::stack<BaseState*> AppManager::states;
 sf::RenderWindow       AppManager::window;
 
 void AppManager::Init() {
+
     window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Space Invaders");    //Creates Window
-
-    sf::View view({VIEW_WIDTH/2.f, VIEW_HEIGHT/2.f},{VIEW_WIDTH, VIEW_HEIGHT} );//Sets window view
-    window.setView(view);
-
-    addState(new MainMenu(window));
+    sf::View view({VIEW_WIDTH/2.f, VIEW_HEIGHT/2.f},{VIEW_WIDTH, VIEW_HEIGHT} );
+    window.setView(view);                                                                                        //Sets window view
+    addState(new MainMenu(window));                                                                     // adds the main menu state
 }
 
 void AppManager::Run() {
@@ -37,12 +36,12 @@ void AppManager::Run() {
 }
 
 void AppManager::addState(BaseState *state) {
-    states.push(state);
+    states.push(state);                          // Adds state to stack
 }
 
 void AppManager::popState() {
-    BaseState* deleting = states.top();
+    BaseState* deleting = states.top();             // Removes state from stack
     states.pop();
-    delete deleting;
+    delete deleting;                                // Deletes memory allocated for state
 }
 

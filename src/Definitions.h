@@ -5,20 +5,14 @@
 #ifndef INC_28_SPACEINVADERS_DEFINITIONS_H
 #define INC_28_SPACEINVADERS_DEFINITIONS_H
 
-enum class FrameTitle{};
+
 enum class EnemyType {ONE = 0, TWO, THREE, FOUR};
 enum class EnemyMove {RIGHT, DOWN, LEFT};
 
-constexpr unsigned int WINDOW_WIDTH      = 512;
-constexpr unsigned int WINDOW_HEIGHT     = 768;
-constexpr unsigned int VIEW_WIDTH        = 256;
-constexpr unsigned int VIEW_HEIGHT       = 384;
-constexpr float        TIME_STEP         = 1.f/60.f;
+const unsigned int WINDOW_WIDTH      = 512;
+const unsigned int WINDOW_HEIGHT     = 768;
+const unsigned int VIEW_WIDTH        = 256;
+const unsigned int VIEW_HEIGHT       = 384;
+const float        TIME_STEP         = 1.f/60.f;
 
-constexpr float        ENEMY_MOVE_SPEED  = 0.5f;
-constexpr float        PLAYER_MOVE_SPEED = 1.0f;
-constexpr float        PLAYER_SHOT_CD    =.25f;
-constexpr float        PROJECTILE_SPEED  = 5.f;
-constexpr unsigned int PROJECTILE_DAMAGE = 1u;
-constexpr float        ENEMY_ANIMATE_TIME = .5f;
 #endif //INC_28_SPACEINVADERS_DEFINITIONS_H

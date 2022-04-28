@@ -4,9 +4,10 @@
 
 #include "Player.h"
 
-sf::Clock Player::clock;
-float Player::shotCoolDown = 0.f;
-bool Player::alive = true;
+sf::Clock   Player::clock;
+float       Player::shotCoolDown = 0.f;
+bool        Player::alive = true;
+const float Player::PLAYER_SHOT_CD = 0.2;
 
 Player::Player()
 {

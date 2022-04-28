@@ -10,6 +10,10 @@
 #include "Button.h"
 #include "Game.h"
 #include <SFML/Graphics.hpp>
+/**
+ * @class
+ * Acts as the initial menu for the application
+ */
 
 class MainMenu : public BaseState{
     sf::RenderWindow&   window;
@@ -18,9 +22,13 @@ class MainMenu : public BaseState{
     Button              exitButton;
 
 public:
+    /** Constructor - takes renderwindow reference */
     MainMenu(sf::RenderWindow& window);
+    /** Handles all input from user */
     void HandleInput();
+    /** Updates the buttons in the scene to check if moused over */
     void Update();
+    /** Renders all assets in the main menu to the screen */
     void Render();
 
 };

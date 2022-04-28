@@ -23,7 +23,7 @@ void Game::HandleInput() {
 
         if(!gameOver && event.type == sf::Event::KeyPressed)
         {
-            if(event.key.code == sf::Keyboard::Space)
+            if(event.key.code == sf::Keyboard::Space)                   //Fires weapon based on spacebar event from user
                 shipFire();
         }
 
@@ -31,12 +31,15 @@ void Game::HandleInput() {
         {
             if(event.mouseButton.button == sf::Mouse::Left)
             {
-                AppManager::popState();
-                return;
+                AppManager::popState();                                 //pops state from assetmanager and returns app to the main menu
+                return;                                                 //exits function early because remaining objects in this scope have been deleted
             }
         }
     }
 
+    const float PLAYER_MOVE_SPEED = 1.0f;
+
+    //Uses realtime key feedback to move ship left/right. Offers smoother experience for user.
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
         if(player.getPosition().x > player.getGlobalBounds().width/2)
             player.move(-PLAYER_MOVE_SPEED, 0);
@@ -207,8 +210,12 @@ void Game::updateShipAnimations() {
 
 void Game::updatePlayerProjectiles() {
 
+    const float PROJECTILE_SPEED = 5.f;
+
+    //Iterates through player projectiles and moves them
     for(int i = 0; i < projectiles.size(); i++) projectiles[i].move({0, -PROJECTILE_SPEED});
 
+    //Checks for collisions between player projectiles and enemy sprites
     for(int k = 0; k < projectiles.size();)
     {
         bool hitRegistered = false;
@@ -246,7 +253,7 @@ void Game::updatePlayerProjectiles() {
 
     }
 
-
+    //Checks for collision between player projectiles and barriers
     for(int i = 0; i < projectiles.size();)
     {
         bool hitDetected = false;
@@ -270,7 +277,7 @@ void Game::updatePlayerProjectiles() {
             i++;
     }
 
-
+    //Checks for collision between UFOs and player projectiles
     for(int k = 0; k < projectiles.size();)
     {
         bool hitRegistered = false;
@@ -299,6 +306,8 @@ void Game::updatePlayerProjectiles() {
 }
 
 void Game::updateEnemyProjectiles() {
+
+    const float PROJECTILE_SPEED = 5.f;
 
     //Moves the projectile in down direction
     for(int i = 0; i < enemyProj.size(); i++)   enemyProj[i].move({0,  PROJECTILE_SPEED});
@@ -346,6 +355,8 @@ void Game::updateEnemyProjectiles() {
 }
 
 void Game::updateEnemyMovement() {
+
+    const float ENEMY_MOVE_SPEED = 0.5f;
 
     //Moves all enemies based on current move direction
     if(movDir == EnemyMove::RIGHT)
@@ -414,19 +425,22 @@ void Game::updateUFO() {
             else
                 itr->move({+.5, 0});
         }
+        //Removes UFO if leaves screen
         else if(itr->getPosition().x > VIEW_WIDTH + 20 || itr->getPosition().x < -20)
         {
             ufos.erase(itr);
             break;
         }
     }
-
 }
 
 void Game::updateEndGameStatus() {
+
+    //Checks if the game has ended if the player is dead and has no more lives left
     if(lifeDisplay.numLives() == 0 && !Player::isAlive())
         gameOver = true;
 
+    //Iterates through enemies to see if enemies have gone below the player, if true, game is over
     for(int i = 0; i < enemies.size(); i++) {
         if (enemies[i].getPosition().y > player.getPosition().y) {
             gameOver = true;
@@ -438,17 +452,20 @@ void Game::updateEndGameStatus() {
 void Game::updateEndOfWave() {
     if(enemies.size() != 0) return;
 
+    //Resets enemies and increments wave
     initializeEnemies();
     initializeBarriers();
     topDisplay.nextWave();
 }
 
 void Game::updateMenuButton() {
+    //Initially sets button to low light every frame
     menuButton.lowlight();
 
     sf::Vector2i coords = sf::Mouse::getPosition(window);
     sf::Vector2f mousePos = window.mapPixelToCoords(coords);
 
+    //Highlights menu button if mouse is contained in its borders
     if(menuButton.getBounds().contains(mousePos))
         menuButton.highlight();
 }

@@ -8,6 +8,7 @@ sf::Clock Enemy::timer;
 float Enemy::elapsedTime = 0;
 float Enemy::timeToShoot = 1.0f;
 float Enemy::animationTime = 0.f;
+const float Enemy::ENEMY_ANIMATE_TIME = 0.5f;
 
 Enemy::Enemy(EnemyType enemyType)
     : isDestroyed(false), explodeFrame(1)
@@ -35,20 +36,6 @@ void Enemy::update() {
     elapsedTime   += timer.restart().asSeconds();
 }
 
-
-void Enemy::updateAnimation() {
-    if(isDestroyed)
-    {
-        this->setTextureRect(AssetManager::explodeFrames[explodeFrame++]);
-    }
-    else
-    {
-        sf::IntRect currentRect = this->getTextureRect();
-        currentRect.left = (currentRect.left + 16) % 32;
-        this->setTextureRect(currentRect);
-    }
-}
-
 bool Enemy::isOffCD() {
 
     if(elapsedTime > timeToShoot)
@@ -71,10 +58,23 @@ void Enemy::resetAnimate() {
     animationTime -= ENEMY_ANIMATE_TIME;
 }
 
-bool Enemy::explodeComplete() {
-    return explodeFrame > 3;
+void Enemy::updateAnimation() {
+    if(isDestroyed)
+    {
+        this->setTextureRect(AssetManager::explodeFrames[explodeFrame++]);
+    }
+    else
+    {
+        sf::IntRect currentRect = this->getTextureRect();
+        currentRect.left = (currentRect.left + 16) % 32;
+        this->setTextureRect(currentRect);
+    }
 }
 
 void Enemy::destroy() {
     this->isDestroyed = true;
+}
+
+bool Enemy::explodeComplete() {
+    return explodeFrame > 3;
 }

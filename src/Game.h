@@ -23,6 +23,13 @@
 #include "Button.h"
 
 
+/**
+ * @class
+ * Game state that the user will be spending the most time in. Holds
+ * most other assets in the application and overwrites the required methods
+ * from the base state interface in order to be used in the application stack.
+ */
+
 class Game : public BaseState{
     sf::RenderWindow&       window;
     Player                  player;
@@ -42,27 +49,43 @@ class Game : public BaseState{
     bool                    gameOver;
 
 public:
+    /** Constructor - takes in a window reference and initializes play state*/
     Game(sf::RenderWindow& window);
-
+    /** Handles all inputs from the user */
     void HandleInput();
+    /** Updates the scene*/
     void Update();
+    /** Renders the scene to the window*/
     void Render();
 
 private:
+    /** Initializes barriers in game*/
     void initializeBarriers();
+    /** Initializes enemies in game*/
     void initializeEnemies();
+    /** Sets text for end of game scenario*/
     void initializeText();
 
+    /** Player fires projectile*/
     void shipFire();
+    /** Enemies fire projectile*/
     void enemyFire();
 
+    /** Updates animations in the scene*/
     void updateShipAnimations();
+    /** Moves player projectiles and checks collisions*/
     void updatePlayerProjectiles();
+    /** Moves enemy projectiles and checks collisions*/
     void updateEnemyProjectiles();
+    /** Updates the movement of the enemies*/
     void updateEnemyMovement();
+    /** Updates the spawn and movement of the UFOs*/
     void updateUFO();
+    /** Checks if end of wave has occurred*/
     void updateEndOfWave();
+    /** Checks if end of game has occurred*/
     void updateEndGameStatus();
+    /** Handles Menu button highlight if moused over*/
     void updateMenuButton();
 };
 

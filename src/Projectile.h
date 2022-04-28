@@ -8,6 +8,10 @@
 #include <SFML/Graphics.hpp>
 #include "AssetManager.h"
 
+/**
+ * @class projectile used by both user and enemies to fire
+ * at one another in an attempt to destroy each other.
+ */
 class Projectile : public sf::Sprite{
 public:
     Projectile();

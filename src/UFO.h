@@ -10,6 +10,9 @@
 #include "AssetManager.h"
 #include "Definitions.h"
 
+/**
+ * @class UFO that moves across the top of the screen
+ */
 class UFO : public sf::Sprite {
     static sf::Clock timer;
     static float accumulator;
@@ -21,15 +24,23 @@ class UFO : public sf::Sprite {
     bool alive;
     int destroyFrame;
 public:
+    /** Constructor - intializes all values */
     UFO();
 
+    /** returns if the UFO is alive */
     bool isAlive();
+    /** sets the flag alive to false */
     void destroy();
+    /** update the animation of the UFO when destroyed */
     bool updateDestroyed();
 
+    /** Resets the internal accumulator timer */
     static void resetTimer();
+    /** Returns whether the spawn timer has been surpassed */
     static bool spawnTime();
+    /** Swaps the direction of the UFO's travel */
     static void swapDirection();
+    /** Returns the direction of the UFO's travel */
     static EnemyMove getDirection();
 };
 
