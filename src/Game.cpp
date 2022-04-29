@@ -262,10 +262,6 @@ void Game::updatePlayerProjectiles() {
         {
             if(barriers[j].getGlobalBounds().intersects(projectiles[i].getGlobalBounds()))
             {
-                barriers[j].hitRegister();
-                if(barriers[j].isDestroyed())
-                    barriers.erase(barriers.begin() + j);
-
                 hitDetected = true;
                 break;
             }
@@ -338,10 +334,6 @@ void Game::updateEnemyProjectiles() {
         {
             if(barriers[j].getGlobalBounds().intersects(enemyProj[i].getGlobalBounds()))
             {
-                barriers[j].hitRegister();
-                if(barriers[j].isDestroyed())
-                    barriers.erase(barriers.begin() + j);
-
                 hitDetected = true;
                 break;
             }
@@ -454,7 +446,6 @@ void Game::updateEndOfWave() {
 
     //Resets enemies and increments wave
     initializeEnemies();
-    initializeBarriers();
     topDisplay.nextWave();
 }
 

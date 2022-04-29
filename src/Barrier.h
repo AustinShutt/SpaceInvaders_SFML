@@ -16,15 +16,10 @@
  */
 
 class Barrier : public sf::Sprite{
-    static std::array<sf::IntRect, 4> barrierFrames;
     int lifeCount;
 public:
     /** Default Constructor - sets texture and origin */
     Barrier();
-    /** reduces life count of barrier and progresses frame */
-    void hitRegister();
-    /** returns boolean value true if life count below 0 */
-    bool isDestroyed();
 };
 
 
