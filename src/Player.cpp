@@ -11,10 +11,10 @@ const float Player::PLAYER_SHOT_CD = 0.2;
 
 Player::Player()
 {
-    this->setTexture(AssetManager::getSpriteSheet());
-    this->setTextureRect(sf::IntRect(64,0,16,16));
-    this->setPosition({VIEW_WIDTH /2.f - 1, VIEW_HEIGHT * 7.f/ 8.f});
-    this->setOrigin(9, 0);
+    setTexture(AssetManager::getSpriteSheet());
+    setTextureRect(sf::IntRect(64,0,16,16));
+    setPosition({VIEW_WIDTH /2.f - 1, VIEW_HEIGHT * 7.f/ 8.f});
+    setOrigin(9, 0);
 
     deathAnimation.setTexture(AssetManager::getSpriteSheet());
     deathAnimation.setTextureRect(AssetManager::explodeFrames[1]);

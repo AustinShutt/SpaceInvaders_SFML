@@ -13,21 +13,21 @@ const float Enemy::ENEMY_ANIMATE_TIME = 0.5f;
 Enemy::Enemy(EnemyType enemyType)
     : isDestroyed(false), explodeFrame(1)
 {
-    this->setTexture(AssetManager::getSpriteSheet());
+    setTexture(AssetManager::getSpriteSheet());
 
     switch(enemyType)
     {
         case EnemyType::ONE:
-            this->setTextureRect(sf::IntRect(0,0,16,16));
+            setTextureRect(sf::IntRect(0,0,16,16));
             break;
         case EnemyType::TWO:
-            this->setTextureRect(sf::IntRect(0,16,16,16));
+            setTextureRect(sf::IntRect(0,16,16,16));
             break;
         case EnemyType::THREE:
-            this->setTextureRect(sf::IntRect(0,32,16,16));
+            setTextureRect(sf::IntRect(0,32,16,16));
             break;
         case EnemyType::FOUR:
-            this->setTextureRect(sf::IntRect(0,48,16,16));
+            setTextureRect(sf::IntRect(0,48,16,16));
             break;
     }
 }
@@ -61,18 +61,18 @@ void Enemy::resetAnimate() {
 void Enemy::updateAnimation() {
     if(isDestroyed)
     {
-        this->setTextureRect(AssetManager::explodeFrames[explodeFrame++]);
+        setTextureRect(AssetManager::explodeFrames[explodeFrame++]);
     }
     else
     {
-        sf::IntRect currentRect = this->getTextureRect();
+        sf::IntRect currentRect = getTextureRect();
         currentRect.left = (currentRect.left + 16) % 32;
-        this->setTextureRect(currentRect);
+        setTextureRect(currentRect);
     }
 }
 
 void Enemy::destroy() {
-    this->isDestroyed = true;
+    isDestroyed = true;
 }
 
 bool Enemy::explodeComplete() {

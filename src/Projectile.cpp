@@ -6,6 +6,6 @@
 
 
 Projectile::Projectile() {
-    this->setTexture(AssetManager::getSpriteSheet());
-    this->setTextureRect(sf::Rect(39,5,1,5));
+    setTexture(AssetManager::getSpriteSheet());
+    setTextureRect(sf::Rect(39,5,1,5));
 }

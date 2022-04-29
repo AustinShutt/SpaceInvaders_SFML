@@ -12,8 +12,8 @@ const int   UFO::endRandomBetween = 15;
 EnemyMove   UFO::dir(EnemyMove::LEFT);
 
 UFO::UFO() :alive(true),destroyFrame(0){
-    this->setTexture(AssetManager::getSpriteSheet());
-    this->setTextureRect(sf::IntRect(48,5,16,7));
+    setTexture(AssetManager::getSpriteSheet());
+    setTextureRect(sf::IntRect(48,5,16,7));
 
     resetTimer();
 
@@ -45,7 +45,7 @@ bool UFO::isAlive() {
 void UFO::destroy() {
     alive = false;
 
-    this->setTextureRect(AssetManager::explodeFrames[destroyFrame]);
+    setTextureRect(AssetManager::explodeFrames[destroyFrame]);
 }
 
 bool UFO::updateDestroyed() {
@@ -58,7 +58,7 @@ bool UFO::updateDestroyed() {
         return true;
     }
 
-    this->setTextureRect(AssetManager::explodeFrames[destroyFrame]);
+    setTextureRect(AssetManager::explodeFrames[destroyFrame]);
 
     return false;
 }

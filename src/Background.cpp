@@ -7,5 +7,5 @@
 Background::Background() {
 
     texture.loadFromFile("../assets/si_background.png");
-    this->setTexture(texture);
+    setTexture(texture);
 }
